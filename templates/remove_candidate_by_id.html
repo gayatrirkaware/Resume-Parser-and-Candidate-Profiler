@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remove Candidate</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Remove Candidate by ID</h2>
+    <input type="text" id="candidateId" placeholder="Enter Candidate ID" />
+    <button onclick="removeCandidate()">Delete</button>
+    <p id="result"></p>
+    <a href="resume_dashboard.html" class="home-btn">🏠 Home</a>
+</div>
+
+<script>
+function removeCandidate() {
+    const id = document.getElementById('candidateId').value.trim();
+    if (!id) return alert("Please enter an ID.");
+    fetch(`/remove-candidate/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => document.getElementById('result').innerText = data.message);
+}
+</script>
+</body>
+</html>
