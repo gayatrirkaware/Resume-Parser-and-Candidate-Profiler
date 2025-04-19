@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Candidate</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Get Candidate by ID</h2>
+    <input type="text" id="candidateId" placeholder="Enter Candidate ID" />
+    <button onclick="getCandidate()">Search</button>
+
+    <div id="resultContainer" style="text-align:left; margin-top:20px;"></div>
+
+    <a href="resume_dashboard.html" class="home-btn">🏠 Home</a>
+</div>
+
+<script>
+function getCandidate() {
+    const id = document.getElementById('candidateId').value.trim();
+    if (!id) return alert("Please enter a Candidate ID");
+
+    fetch(`/candidate/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('resultContainer');
+            container.innerHTML = ""; // Clear old results
+
+            if (data.status === "Success") {
+                const candidate = data.data;
+
+                const html = `
+                    <h3>Candidate Details:</h3>
+                    <p><strong>Name:</strong> ${candidate.name}</p>
+                    <p><strong>Email:</strong> ${candidate.email}</p>
+                    <p><strong>Skills:</strong> ${candidate.skills}</p>
+                    <p><strong>Experience:</strong> ${candidate.total_experience}</p>
+                    <p><strong>Education:</strong> ${candidate.education}</p>
+                    <p><strong>Resume File:</strong> ${candidate.file_name}</p>
+                    <p><strong>Candidate ID:</strong> ${candidate._id}</p>
+                `;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `<p style="color: red;">${data.message}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById('resultContainer').innerHTML = `<p style="color:red;">Error fetching candidate data</p>`;
+        });
+}
+</script>
+</body>
+</html>
