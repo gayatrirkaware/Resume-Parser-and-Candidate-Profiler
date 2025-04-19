@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Resume</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Upload Resume</h2>
+    <input type="file" id="resumeFile" />
+    <button onclick="uploadResume()">Upload</button>
+    <p id="result"></p>
+    <a href="resume_dashboard.html" class="home-btn">🏠 Home</a>
+</div>
+
+<script>
+function uploadResume() {
+    const file = document.getElementById('resumeFile').files[0];
+    if (!file) return alert("Please select a file.");
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/upload-resume', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => document.getElementById('result').innerText = data.message)
+        .catch(err => console.error(err));
+}
+</script>
+</body>
+</html>
