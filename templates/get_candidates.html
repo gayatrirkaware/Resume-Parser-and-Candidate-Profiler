@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Candidates</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>All Candidates</h2>
+    <button onclick="fetchCandidates()">Get Candidates</button>
+    <div id="candidatesList" style="text-align:left; margin-top:10px;"></div>
+    <a href="resume_dashboard.html" class="home-btn">🏠 Home</a>
+</div>
+
+<script>
+function fetchCandidates() {
+    fetch('/get-candidates')
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById('candidatesList');
+            list.innerHTML = '';
+            if (data.status === 'Successful') {
+                data.message.forEach(c => {
+                    const div = document.createElement('div');
+                    div.textContent = `${c.name} (${c.email}) - Skills: ${c.skills}`;
+                    list.appendChild(div);
+                });
+            } else {
+                list.innerText = data.message;
+            }
+        });
+}
+</script>
+</body>
+</html>
